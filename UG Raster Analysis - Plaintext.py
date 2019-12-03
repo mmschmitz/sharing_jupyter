@@ -23,24 +23,17 @@ import geopandas as gpd
 import rasterio as rio
 from rasterio.plot import show
 from rasterio.mask import mask
-# A package created for this class that will be discussed later in this lesson
 import earthpy as et
 import earthpy.plot as ep
 
 # Prettier plotting with seaborn
 import seaborn as sns
 sns.set(font_scale=1.5, style="white")
-# Get data and set wd
-#et.data.get_data("colorado-flood")
-#os.chdir(os.path.join(et.io.HOME, 'earth-analytics'))
-
 
 ##definition of objects at the top of the file for purposes of keeping it clean
 
 #path = "[REDACTED]/DEM" #removed for personal concerns
-
-os.chdir(os.path.join(path)) #adding path to current path
-#path
+os.chdir(os.path.join(path)) #adding path object to current path
 
 #defining the raster object below that will be used in subsequent analyses - this can be changed later on
 
@@ -73,9 +66,7 @@ with rio.open(rast_ug) as src:
     # Get bounds of object
     bounds = src.bounds
 
-
 lidar_dem_im #we can now see that this is now read as an array
-
 
 spatial_extent #see spatial extent of the object - should have the same params as lidar_dem.bounds
 
@@ -92,32 +83,26 @@ print("rasterio bounds:", bounds)
 with rio.open(rast_ug) as src:
     # convert / read the data into a numpy array: masked= True turns `nodata` values to nan
     lidar_dem_im = src.read(1, masked=True)
-    # create a spatial extent object using rio.plot.plotting
-    spatial_extent = rio.plot.plotting_extent(src)
+    spatial_extent = rio.plot.plotting_extent(src)     # create a spatial extent object using rio.plot.plotting
 
 print("object shape:", lidar_dem_im.shape)
 print("object type:", type(lidar_dem_im))
 
 with rio.open(rast_ug) as src:
-    # Convert / read the data into a numpy array:
-    lidar_dem_im2 = src.read(1)
+    lidar_dem_im2 = src.read(1) # convert / read the data into a numpy array
 
 with rio.open(rast_ug) as src:
-    # Convert / read the data into a numpy array:
-    lidar_dem_im3 = src.read()
+    lidar_dem_im3 = src.read()  # convert / read the data into a numpy array
 
 print("Array Shape Using read(1):", lidar_dem_im2.shape)
-# Notice that without the (1), the numpy array has a third dimension
-print("Array Shape Using read():", lidar_dem_im3.shape)
-
+print("Array Shape Using read():", lidar_dem_im3.shape) # notice that without the (1), the numpy array has a third dimension (which is what we want)
 
 ## RASTER METADATA before getting started with plotting/reading this dataset
 
 # View crs of raster imported with rasterio
 with rio.open(rast_ug) as src:
     print(src.crs) 
-#should line up to World Geodetic System (WGS) 1984 (EPSG: 4326), since I did not reproject this to 
-# another project system
+#should line up to World Geodetic System (WGS) 1984 (EPSG: 4326), since I did not reproject this to another project system
 
 # converting the ESPG string over to a proj4 string:
 proj4 = et.epsg['4326']
@@ -134,7 +119,7 @@ ep.plot_bands(lidar_dem_im,
               cmap='Greys',
               extent=spatial_extent,
               title="Digital Elevation Model (DEM), \n Shuttle Radar Topography Mission (SRTM), NASA \n  Western Uganda",
-              cbar=False)
+              cbar=False) #think about removing cmap statement and plotting straight black-white raster
 
 plt.show()
 
